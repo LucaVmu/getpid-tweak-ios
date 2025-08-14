@@ -1,0 +1,30 @@
+name: Build iOS dylib
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build dylib for device (arm64)
+        run: |
+          xcrun -sdk iphoneos clang -dynamiclib -o MyPIDAlert.dylib MyPIDAlert.m -arch arm64 -fobjc-
+
+      - name: Build dylib for simulator (x86_64 + arm64)
+        run: |
+          xcrun -sdk iphonesimulator clang -dynamiclib -o MyPIDAlertSim.dylib MyPIDAlert.m -arch x86_64 -arch arm64 -fobjc-arc
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dylibs
+          path: |
+            MyPIDAlert.dylib
+            MyPIDAlertSim.dylib
