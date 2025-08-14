@@ -22,9 +22,10 @@ jobs:
           xcrun -sdk iphonesimulator clang -dynamiclib -o MyPIDAlertSim.dylib MyPIDAlert.m -arch x86_64 -arch arm64 -fobjc-arc
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dylibs
           path: |
             MyPIDAlert.dylib
             MyPIDAlertSim.dylib
+          retention-days: 90
