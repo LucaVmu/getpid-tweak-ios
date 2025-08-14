@@ -1,4 +1,4 @@
-name: Build iOS dylib
+name: Build unsigned dylib
 
 on:
   push:
@@ -15,17 +15,11 @@ jobs:
 
       - name: Build dylib for device (arm64)
         run: |
-          xcrun -sdk iphoneos clang -dynamiclib -o MyPIDAlert.dylib MyPIDAlert.m -arch arm64 -fobjc-
-
-      - name: Build dylib for simulator (x86_64 + arm64)
-        run: |
-          xcrun -sdk iphonesimulator clang -dynamiclib -o MyPIDAlertSim.dylib MyPIDAlert.m -arch x86_64 -arch arm64 -fobjc-arc
+              xcrun -sdk iphoneos clang -dynamiclib getpid-tweak.m -arch arm64 -fobjc-arc -o getpid-tweak.dylib
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dylibs
-          path: |
-            MyPIDAlert.dylib
-            MyPIDAlertSim.dylib
+          path: getpid-tweak.dylib
           retention-days: 90
